@@ -1,96 +1,136 @@
-$(function(){
-  //var elem = document.getElementById("my");
+/**
+ * mojimate.js
+ * @fileoverview HTMLのテキストノードに含まれる表外漢字と人名用漢字をそれぞれハイライトします。
+ * @author Hiroshi Takase (Densho Channel, <info@denshochan.com>)
+ */
+
+window.onload = function() {
   var elem = document.getElementsByTagName("body")[0];
-  chk(elem);
-});
+  checkKanji(elem);
+};
 
-var char_cache = {};
+/**
+ * チェックした文字とそのUnicode値からなる連想配列
+ * @type {Object.<string>}
+ */
+var checked_chars = {};
 
-var chk = function(elem) {
-  //console.log(elem);
+/**
+ * 指定した要素に含まれるテキストノードを一文字ずつチェックする
+ * @param {object} elem チェックする要素
+ */
+var checkKanji = function(elem) {
   for(var i = elem.firstChild; i; i = i.nextSibling) {
-    //console.log("nodeType: %s", i.nodeType);
     if(i.nodeType == 1){
-        chk(i);
+        checkKanji(i);
         continue;
     }
     if(i.nodeType != 3){
         continue;
     }
-    while(i.length){
-      var c = i.nodeValue.charAt(0);
-      //console.log(c);
-      var new_node = char(c);
-      i.parentNode.insertBefore(new_node, i);
-      i.nodeValue = i.nodeValue.substring(1);
+    while(i.length){ // テキストノードの内容がなくなるまで繰り返し
+      var char = i.nodeValue.charAt(0);
+      var new_node = checkChar(char);
+      i.parentNode.insertBefore(new_node, i); // チェックした文字を挿入
+      i.nodeValue = i.nodeValue.substring(1); // 元テキストノードから1文字削除
     }
 
   }
 }
 
-var char = function(c, tag) {
-    //var c = .nodeValue.charAt(0);
+/**
+ * 指定した文字を常用漢字、人名用漢字、表外漢字、非漢字に分類する
+ * @param {string} char チェックする文字
+ * @param {string} tag 文字を囲むタグ
+ * @return {object} ノードオブジェクト
+ */
+var checkChar = function(char, tag) {
     tag = tag || 'span';
-    if (isKanji(c)) {
-      if (isCommonKanji(c)) {
+    if (isKanji(char)) {
+      // 漢字
+      if (isCommonKanji(char)) {
+        // 常用漢字
         var new_node = document.createElement(tag);
-        new_node.appendChild(document.createTextNode(c));
+        new_node.appendChild(document.createTextNode(char));
         new_node.setAttribute('class','common_kanji');
         return new_node;
       }
-      if (isJinmeiKanji(c)) {
+      if (isJinmeiKanji(char)) {
+        // 人名用漢字
         var new_node = document.createElement(tag);
-        new_node.appendChild(document.createTextNode(c));
+        new_node.appendChild(document.createTextNode(char));
         new_node.setAttribute('class','jinmei_kanji');
         new_node.setAttribute('style','background-color:#FF99CC;color:#000;cursor:pointer;');
         new_node.setAttribute('title','人名用漢字');
       } else {
+        // 表外漢字
         var new_node = document.createElement(tag);
-        new_node.appendChild(document.createTextNode(c));
+        new_node.appendChild(document.createTextNode(char));
         new_node.setAttribute('class','hyogai_kanji');
         new_node.setAttribute('style','background-color:#00FFFF;color:#000;cursor:pointer;');
         new_node.setAttribute('title','表外漢字');
       }
     } else {
-      var new_node = document.createTextNode(c);
+      // 非漢字
+      var new_node = document.createTextNode(char);
     } 
   return new_node;
 }
 
-var isKanji = function(c) {
-  if(!char_cache[c]) {
-    char_cache[c] = c.charCodeAt(0);
+/**
+ * 指定した文字を漢字か非漢字か判別する
+ * @param {string} char チェックする文字
+ * @return {boolean} チェック結果
+ */
+var isKanji = function(char) {
+  // すでにチェック済みの文字か？
+  if(!checked_chars[char]) {
+    checked_chars[char] = char.charCodeAt(0);
   }
-
-  var cp = char_cache[c];
+  // 文字のUnicode値
+  var cp = checked_chars[char];
   
   if(cp >= 19968 && cp <= 40959) {
     // Unified Repertoire and Ordering U+4E00(19968) 〜 U+9FFF(40959)
-    //console.log("URO: %s, Codepoint: %d", c, cp);
+    //console.log("URO: %s, Codepoint: %d", char, cp);
     return true;
   } else if(cp >= 13312 && cp <= 19967) {
     // CJK Unified Ideographs Extension A U+3400(13312) 〜 U+4DFF(19967)
-    //console.log("Extension A: %s, Codepoint: %d", c, cp);
+    //console.log("Extension A: %s, Codepoint: %d", char, cp);
     return true;
   } else {
     return false;
   }
 }
 
-var isCommonKanji = function(c) {
-  if(!common_kanji[c]) {
+/**
+ * 指定した文字を常用漢字か否か判別する
+ * @param {string} char チェックする文字
+ * @return {boolean} チェック結果
+ */
+var isCommonKanji = function(char) {
+  if(!common_kanji[char]) {
     return false;
   }
     return true;
 }
 
-var isJinmeiKanji = function(c) {
-  if(!jinmei_kanji[c]) {
+/**
+ * 指定した文字を人名用漢字か否か判別する
+ * @param {string} char チェックする文字
+ * @return {boolean} チェック結果
+ */
+var isJinmeiKanji = function(char) {
+  if(!jinmei_kanji[char]) {
     return false;
   }
     return true;
 }
 
+/**
+ * 常用漢字
+ * @type {Object.<string>}
+ */
 var common_kanji = {
 "亜": "U+4E9C",
 "哀": "U+54C0",
@@ -2230,6 +2270,10 @@ var common_kanji = {
 "腕": "U+8155",
 };
 
+/**
+ * 人名用漢字
+ * @type {Object.<string>}
+ */
 var jinmei_kanji = {
 "丑": "U+4E11",
 "丞": "U+4E1E",
