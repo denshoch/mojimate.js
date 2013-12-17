@@ -24,6 +24,10 @@ HTMLファイルの `<head>` の中に次のように記述します。
 
     <script type="text/javascript" src="path/to/mojimate.js"></script>
 
+または、Githubページにホストされたスクリプトを読み込んでもいけるかも。
+
+     <script type="text/javascript" src="http://denshoch.github.io/mojimate.js/mojimate.js"></script>
+
 テキストに含まれる漢字が次のようにハイライトされます。
 
 * <span style="background-color:#00FFFF;">表外漢字</span>
