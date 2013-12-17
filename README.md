@@ -18,6 +18,10 @@ HTMLファイルの中で使われている表外漢字（常用漢字表に含�
 >
 > ――<small>[人名用漢字 - Wikipedia](http://ja.wikipedia.org/wiki/%E4%BA%BA%E5%90%8D%E7%94%A8%E6%BC%A2%E5%AD%97)</small>
 
+### その他
+
+表外漢字であっても、共同通信社記者ハンドブック(第12版)で使うとされた漢字を専用の色でハイライトします。
+
 ## 使い方
 
 HTMLファイルの `<head>` の中に次のように記述します。
@@ -32,6 +36,7 @@ HTMLファイルの `<head>` の中に次のように記述します。
 
 * <span style="background-color:#00FFFF;">表外漢字</span>（水色）
 * <span style="background-color:#FF99CC;">人名用漢字</span>（ピンク）
+* <span style="background-color:#FFFF00;">記者ハンドブックで使うとされた表外漢字</span>（黄色）
 
 ## ハイライトされた漢字があったらどうする？
 

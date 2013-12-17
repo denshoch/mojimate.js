@@ -62,7 +62,14 @@ var checkChar = function(char, tag) {
         new_node.setAttribute('class','jinmei_kanji');
         new_node.setAttribute('style','background-color:#FF99CC;color:#000;cursor:pointer;');
         new_node.setAttribute('title','人名用漢字');
-      } else {
+      } else if (isHandbookKanji(char)) {
+        // 記者ハンドブックで使う表外漢字
+        var new_node = document.createElement(tag);
+        new_node.appendChild(document.createTextNode(char));
+        new_node.setAttribute('class','handbook_kanji');
+        new_node.setAttribute('style','background-color:#FFFF00;color:#000;cursor:pointer;');
+        new_node.setAttribute('title','記者ハンドブックが使うと定めた表外漢字');
+      }else {
         // 表外漢字
         var new_node = document.createElement(tag);
         new_node.appendChild(document.createTextNode(char));
@@ -122,6 +129,18 @@ var isCommonKanji = function(char) {
  */
 var isJinmeiKanji = function(char) {
   if(!jinmei_kanji[char]) {
+    return false;
+  }
+    return true;
+}
+
+/**
+ * 指定した表外漢字を記者ハンドブックで使用できる文字か否か判別する
+ * @param {string} char チェックする文字
+ * @return {boolean} チェック結果
+ */
+var isHandbookKanji = function(char) {
+  if(!handbook_kanji[char]) {
     return false;
   }
     return true;
@@ -3135,5 +3154,18 @@ var jinmei_kanji = {
 "黑": "U+9ED1",
 "鼎": "U+9F0E",
 "齊": "U+9F4A",
-"龍": "U+9F8D",
+"龍": "U+9F8D"
 };
+
+/**
+ * 表外漢字だが共同通信社記者ハンドブック（第12版）が使用すると定めた漢字
+ * @type {Object.<string>}
+ */
+var handbook_kanji = {
+//"磯": "U+78EF", // 人名用漢字と重複
+"炒": "U+7092",
+//"絆": "U+7D46", // 人名用漢字と重複
+//"哨": "U+54E8", // 人名用漢字と重複
+"疹": "U+75B9",
+"胚": "U+80DA"
+}
