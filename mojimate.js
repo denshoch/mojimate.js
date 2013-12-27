@@ -3,11 +3,14 @@
  * @fileoverview HTMLのテキストノードに含まれる表外漢字と人名用漢字をそれぞれハイライトします。
  * @author Hiroshi Takase (Densho Channel, <info@denshochan.com>)
  */
-
-window.onload = function() {
-  var elem = document.getElementsByTagName("body")[0];
-  checkKanji(elem);
-};
+/*
+* Example
+* 
+* window.onload = function() {
+*  var elem = document.getElementsByTagName("body")[0];
+*  checkKanji(elem);
+*};
+*/
 
 /**
  * チェックした文字とそのUnicode値からなる連想配列
