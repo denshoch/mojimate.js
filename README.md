@@ -28,9 +28,16 @@ HTMLファイルの `<head>` の中に次のように記述します。
 
     <script type="text/javascript" src="path/to/mojimate.js"></script>
 
-または、Githubページにホストされたスクリプトを読み込んでもいける。
+または、Githubページにホストされたスクリプトを読み込んでもよいです。
 
-     <script type="text/javascript" src="http://denshoch.github.io/mojimate.js/mojimate.js"></script>
+    <script type="text/javascript" src="http://denshoch.github.io/mojimate.js/mojimate.js"></script>
+
+HTMLの中で`checkKanji()`に要素を引き渡してください。
+
+    <script type="text/javascript">
+      var elem = document.getElementsByTagName("body")[0];
+      checkKanji(elem);
+    </script>
 
 テキストに含まれる漢字が次のようにハイライトされます。
 

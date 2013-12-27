@@ -5,11 +5,10 @@
  */
 /*
 * Example
-* 
-* window.onload = function() {
-*  var elem = document.getElementsByTagName("body")[0];
-*  checkKanji(elem);
-*};
+*  <script type="text/javascript">
+*    var elem = document.getElementsByTagName("body")[0];
+*    checkKanji(elem);
+*  </script>
 */
 
 /**
