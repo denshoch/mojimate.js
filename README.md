@@ -84,3 +84,4 @@ HTMLの中で`checkKanji()`に要素を引き渡してください。
 ## LICENSE
 
 This library is distribuetd under the term of the MIT License. See MIT-LICENSE file for more info.
+
